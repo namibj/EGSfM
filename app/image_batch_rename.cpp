@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "third_party/stlplus3/filesystemSimplified/file_system.hpp"
+//#include "third_party/stlplus3/filesystemSimplified/file_system.hpp"
+#include "stlplus3/stlplus.h"
 
 using namespace std;
 

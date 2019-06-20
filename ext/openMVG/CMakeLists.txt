@@ -275,25 +275,27 @@ endif()
 ## find eigen3 ##
 #################
 message("-- Check for Eigen3")
-find_package(Eigen3 REQUIRED)
-if (${EIGEN3_FOUND})
-    message(STATUS "Eigen3 found in " ${EIGEN3_INCLUDE_DIR})
+#find_package(Eigen3 REQUIRED)
+#if (${EIGEN3_FOUND})
+#    message(STATUS "Eigen3 found in " ${EIGEN3_INCLUDE_DIR})
     include_directories(${EIGEN3_INCLUDE_DIR})
-else()
-    message(FATAL_ERROR "Eigen3 not found!")
-endif()
+    include_directories(${CMAKE_SOURCE_DIR}/ext/eigen3)
+#else()
+#    message(FATAL_ERROR "Eigen3 not found!")
+#endif()
 
 ################
 ## find Ceres ##
 ################
 message("-- Check for Ceres-Solver")
-find_package(Ceres REQUIRED)
-if (${CERES_FOUND})
-    message(STATUS "Ceres found in " ${CERES_INCLUDE_DIRS})
+#find_package(Ceres REQUIRED)
+#if (${CERES_FOUND})
+#    message(STATUS "Ceres found in " ${CERES_INCLUDE_DIRS})
     include_directories(${CERES_INCLUDE_DIRS})
-else()
-    message(FATAL_ERROR "Ceres not found")
-endif()
+    include_directories(ext/Ceres/src/Ceres-build/config)
+#else()
+#    message(FATAL_ERROR "Ceres not found")
+#endif()
 
 # ==============================================================================
 # Flann

@@ -40,7 +40,7 @@ endif()
 
 # Additional cmake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g -pipe -march=native -mtune=native -mfpmath=sse")
 
 # by default build in release mode
@@ -116,8 +116,9 @@ find_package(glog REQUIRED)
 add_definitions(-DLIBVOT_USE_GLOG)
 
 # Setup eigen3
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
+#find_package(Eigen3 REQUIRED)
+#include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/ext/eigen3)
 
 # output include directories for debug
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

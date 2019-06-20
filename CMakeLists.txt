@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(XFeatures)
+include(ExternalProject)
+include(FetchContent)
+
+#TODO: Convert to individual logic based on saving which revision we explicetely checked out, so as to only skip trying to update when it'd be useless. Also try to make it look at the actual info inside, so that we don't change the timestamps of the source files we check out from git if we stay at the same commit hash. This enables updates that automatically track upstream if we specify a branch isntead of a tag, while still skipping needless recompilation. Normaly we'd have to choose between thoe two, i.e., either check for upstream updates upon re-running cmake, or skip recompilation of dependants when there were no new commits. Maybe we can even get it to partially skip recompilation based on the external project's own makefile infrastructure (fetching from git/checking out, and telling cmake to keep it's cache when no cmake files changed or such (otherwise propagating cmake changes that'd require deleting cmake's cache would be ugly and unlikely to be supported by upstream, as it'd likely require addition of a stub file that gets updated/changed whenever such breaking changes occur)
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
 # Set path for cmake finder
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+#set(GLOG_LIBRARY glog)
+if (FALSE)
 #################
 ## find eigen3 ##
 #################
@@ -31,7 +38,7 @@ if (${CERES_FOUND})
 else()
     message(FATAL_ERROR "Ceres not found")
 endif()
-
+endif()
 ###############
 ## find glog ##
 ###############
@@ -100,6 +107,7 @@ message("--Check for openMVG")
     # message(FATAL_ERROR "Can't find OpenMVG! Please set OPENMVG_INCLUDE_DIRS & OPENMVG_LIBRARIES")
 # endif()
 
+if(FALSE)
 set(OPENMVG_LIBS_DIR ${CMAKE_BINARY_DIR}/ext/openMVG/Linux-x86_64-Release)
 set(OPENMVG_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/ext/openMVG)
 set(OPENMVG_LIBRARIES # domset
@@ -124,9 +132,11 @@ set(OPENMVG_LIBRARIES # domset
                       openMVG_numeric
                       openMVG_robust_estimation
                       openMVG_sfm
-                      openMVG_stlplus
+                      openMVG_stlplusCeres
                       openMVG_system
-                      vlsift)
+                      vlsift
+                    $(Ceres_LIBRARIES))
+endif()
 
 ########################
 ## Unit Test Enabling ##
@@ -144,8 +154,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src
                     ${PROJECT_SOURCE_DIR}/ext/graclus/metisLib
                     ${PROJECT_SOURCE_DIR}/ext/graclus/multilevelLib
                     ${PROJECT_SOURCE_DIR}/ext/graclus/graclus
-                    ${PROJECT_SOURCE_DIR}/ext/yaml-cpp/include 
-                    ${OPENMVG_INCLUDE_DIRS} 
+                    ${PROJECT_SOURCE_DIR}/ext/yaml-cpp/include
+                    ${PROJECT_SOURCE_DIR}/ext/eigen3
+                    ${PROJECT_SOURCE_DIR}/ext/ceres-solver/include
                     ${GLOG_INCLUDE_DIRS}
                     ${GLFGS_INCLUDE_DIRS}
                     ${SUITESPARSE_INCLUDE_DIRS})
@@ -155,6 +166,7 @@ include(${PROJECT_SOURCE_DIR}/cmake/UseGTest.cmake)
 
 # Add subdirectories
 add_subdirectory(${PROJECT_SOURCE_DIR}/ext)
+include(${PROJECT_SOURCE_DIR}/cmake/SetOpenMVG_Libraries.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 # add_subdirectory(${PROJECT_SOURCE_DIR}/example)

@@ -20,7 +20,7 @@ string(REPLACE " " ";" REPLACED_CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 target_compile_options(openMVG_numeric INTERFACE ${REPLACED_CMAKE_CXX_FLAGS})
 target_include_directories(openMVG_numeric
   PUBLIC
-    $<BUILD_INTERFACE:${EIGEN_INCLUDE_DIRS}>
+    #$<BUILD_INTERFACE:${EIGEN_INCLUDE_DIRS}>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
@@ -28,8 +28,8 @@ if (DEFINED OpenMVG_USE_INTERNAL_EIGEN)
   target_include_directories(openMVG_numeric PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include/openMVG/third_party/eigen/>)
 else()
-  target_include_directories(openMVG_numeric PUBLIC
-    $<INSTALL_INTERFACE:${EIGEN_INCLUDE_DIRS}>)
+  #target_include_directories(openMVG_numeric PUBLIC
+  #  $<INSTALL_INTERFACE:${EIGEN_INCLUDE_DIRS}>)
 endif()
 
 if (MSVC)
